@@ -1,7 +1,7 @@
 /*
  * @Author: Tperam
  * @Date: 2022-04-23 22:09:19
- * @LastEditTime: 2022-04-23 22:36:52
+ * @LastEditTime: 2022-04-23 22:45:01
  * @LastEditors: Tperam
  * @Description:
  * @FilePath: \multilock\mutlilock.go
@@ -25,7 +25,9 @@ func NewMultilock(estimate int) *Multilock {
 	}
 }
 
-func (m *Multilock) ExecFunc(f func() error, lockName ...string) {
+type ExecFunc func() (interface{}, error)
+
+func (m *Multilock) Do(f ExecFunc, lockName ...string) (interface{}, error) {
 	lockList := make([]*sync.Mutex, 0, len(lockName))
 
 	// 多重锁排序，防止出现死锁
@@ -69,5 +71,5 @@ func (m *Multilock) ExecFunc(f func() error, lockName ...string) {
 		lockList = append(lockList, lock)
 		lock.Lock()
 	}
-	f()
+	return f()
 }
