@@ -1,7 +1,7 @@
 /*
  * @Author: Tperam
  * @Date: 2022-04-23 22:09:19
- * @LastEditTime: 2022-04-23 22:50:09
+ * @LastEditTime: 2022-04-23 22:52:15
  * @LastEditors: Tperam
  * @Description:
  * @FilePath: \multilock\mutlilock.go
@@ -62,7 +62,7 @@ func (m *Multilock) Do(f ExecFunc, lockName ...string) (interface{}, error) {
 		// 当前锁粒度过高，待优化。
 		m.RWlock.RLock()
 		lock, ok = m.m[lockName[i]]
-		m.RWlock.Unlock()
+		m.RWlock.RUnlock()
 		if !ok {
 			m.RWlock.Lock()
 			if lock, ok = m.m[lockName[i]]; !ok {
