@@ -1,7 +1,7 @@
 /*
  * @Author: Tperam
  * @Date: 2022-04-23 22:09:19
- * @LastEditTime: 2022-04-23 22:45:01
+ * @LastEditTime: 2022-04-23 22:50:09
  * @LastEditors: Tperam
  * @Description:
  * @FilePath: \multilock\mutlilock.go
@@ -13,15 +13,15 @@ import (
 )
 
 type Multilock struct {
-	lock sync.Mutex
-	m    map[string]*sync.Mutex
+	RWlock sync.RWMutex
+	m      map[string]*sync.Mutex
 }
 
 // estimate 预估锁大小，减少分配。
 func NewMultilock(estimate int) *Multilock {
 	return &Multilock{
-		lock: sync.Mutex{},
-		m:    make(map[string]*sync.Mutex, estimate),
+		RWlock: sync.RWMutex{},
+		m:      make(map[string]*sync.Mutex, estimate),
 	}
 }
 
@@ -60,13 +60,16 @@ func (m *Multilock) Do(f ExecFunc, lockName ...string) (interface{}, error) {
 		// 判断需要锁的key是否被初始化
 		// double check
 		// 当前锁粒度过高，待优化。
-		if lock, ok = m.m[lockName[i]]; !ok {
-			m.lock.Lock()
+		m.RWlock.RLock()
+		lock, ok = m.m[lockName[i]]
+		m.RWlock.Unlock()
+		if !ok {
+			m.RWlock.Lock()
 			if lock, ok = m.m[lockName[i]]; !ok {
 				lock = &sync.Mutex{}
 				m.m[lockName[i]] = lock
 			}
-			m.lock.Unlock()
+			m.RWlock.Unlock()
 		}
 		lockList = append(lockList, lock)
 		lock.Lock()
