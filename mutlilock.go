@@ -9,6 +9,7 @@
 package multilock
 
 import (
+	"multilock/algorithm"
 	"sync"
 )
 
@@ -31,21 +32,7 @@ func (m *Multilock) Do(f ExecFunc, lockName ...string) (interface{}, error) {
 	lockList := make([]*sync.Mutex, 0, len(lockName))
 
 	// 多重锁排序，防止出现死锁
-	// N^2 ，通常此处不会出现过多的锁
-	for i := 0; i < len(lockName); i++ {
-		for j := i + 1; j < len(lockName); j++ {
-			if lockName[i] == lockName[j] {
-				lockName[j] = lockName[len(lockName)-1]
-				lockName = lockName[:len(lockName)-1]
-				j = i + 1
-			}
-			if lockName[i] > lockName[j] {
-				// 交换
-				lockName[j], lockName[i] = lockName[i], lockName[j]
-			}
-
-		}
-	}
+	lockName = algorithm.Bubblesort(lockName)
 
 	defer func() {
 		for i := range lockList {
