@@ -9,9 +9,9 @@
 外部调用方式:
 
 ```go
-m := multilock.NewMultilock(10)
+m := multilock. NewDefaultCore()
 
-err := m.ExecFunc(f,"lockname 1","lockname 2","lockname 3")
+result, err := m.Do(f,"lockname 1","lockname 2","lockname 3")
 if err != nil {
     ...
 }
@@ -32,11 +32,9 @@ if err != nil {
 3. 外部锁部分
    - 外部锁，主要用于防止不同进程对同一片数据竞争导致的问题。
 
-
-
 ##### 细化思路
 
-抽离
+抽离拆分为五个部分
 
 - 算法部分
 - 具体锁
@@ -45,5 +43,10 @@ if err != nil {
   - Redis 等分布式锁（外部锁）
 - 生成锁
   - 用于生成具体锁
-- mutli 锁
-  - 用于管理"具体锁"，让用户可插件化使用。
+  - 用户自实现锁需要实现此接口
+- 锁核心
+  - 用于管理"具体锁"，基础实现通过map来进行整合管理。
+  - 提供`GetLock()`方法，用于获取锁，同时并对其上锁。
+- 执行模板
+  - 以上所有方法都在此框架中运行。
+
