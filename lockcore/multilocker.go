@@ -9,8 +9,9 @@
 package lockcore
 
 import (
-	"multilock/locker"
 	"sync"
+
+	"github.com/tperam/multilock/locker"
 )
 
 // 需要实现 sync.Locker

@@ -9,8 +9,9 @@
 package locker_test
 
 import (
-	"multilock/locker"
 	"testing"
+
+	"github.com/tperam/multilock/locker"
 )
 
 func BenchmarkCASLock(b *testing.B) {

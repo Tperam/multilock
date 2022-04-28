@@ -9,9 +9,9 @@
 package multilock
 
 import (
-	"multilock/algorithm"
-	"multilock/lockcore"
-	"multilock/locker"
+	"github.com/tperam/multilock/algorithm"
+	"github.com/tperam/multilock/lockcore"
+	"github.com/tperam/multilock/locker"
 )
 
 type Multilock struct {

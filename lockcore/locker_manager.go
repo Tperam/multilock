@@ -8,7 +8,7 @@
  */
 package lockcore
 
-import "multilock/locker"
+import "github.com/tperam/multilock/locker"
 
 type LockCore interface {
 	GetLock(string) (locker.Locker, error)
