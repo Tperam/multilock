@@ -9,13 +9,14 @@
 package multilock_test
 
 import (
-	"multilock"
-	"multilock/algorithm"
-	"multilock/lockcore"
-	"multilock/locker"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/tperam/multilock"
+	"github.com/tperam/multilock/algorithm"
+	"github.com/tperam/multilock/lockcore"
+	"github.com/tperam/multilock/locker"
 )
 
 func TestMultilock(t *testing.T) {

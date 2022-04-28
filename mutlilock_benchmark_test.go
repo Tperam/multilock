@@ -18,14 +18,15 @@ package multilock_test
 
 import (
 	"math/rand"
-	"multilock"
-	"multilock/algorithm"
-	"multilock/lockcore"
-	"multilock/locker"
 	"strconv"
 	"sync"
 	"testing"
 	"time"
+
+	"github.com/tperam/multilock"
+	"github.com/tperam/multilock/algorithm"
+	"github.com/tperam/multilock/lockcore"
+	"github.com/tperam/multilock/locker"
 )
 
 func BenchmarkMultilock(b *testing.B) {

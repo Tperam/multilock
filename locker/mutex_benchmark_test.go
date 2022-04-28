@@ -17,8 +17,9 @@
 package locker_test
 
 import (
-	"multilock/locker"
 	"testing"
+
+	"github.com/tperam/multilock/locker"
 )
 
 func BenchmarkMutex(b *testing.B) {
